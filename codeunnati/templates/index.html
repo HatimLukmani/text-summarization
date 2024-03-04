@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        button {
+            display: block;
+            margin-top: 10px;
+        }
+
+        #summary {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text Summarization</h1>
+    <textarea id="text-input" placeholder="Enter text to summarize"></textarea><br>
+    <label for="percentage-input">Percentage of Summarization:</label>
+    <input type="number" id="percentage-input" min="1" max="100" value="30"> %<br>
+    <button onclick="summarize()">Summarize</button><br><br>
+    <h2>Summary:</h2>
+    <div id="summary"></div>
+
+    <script>
+        function summarize() {
+            const text = document.getElementById('text-input').value;
+            const percentage = document.getElementById('percentage-input').value;
+
+            fetch('/summarize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({text: text, percentage: percentage}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('summary').innerText = data.summary;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
